@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>William Benett</title>
+<meta name="description" content="William Benett: software engineer moving into automotive cybersecurity. CAN bus and ECU lab, application security, eJPT. Links to blog, GitHub, LinkedIn, Hack The Box and TryHackMe.">
+<meta property="og:title" content="William Benett">
+<meta property="og:description" content="Software engineer moving into automotive cybersecurity.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/36342788?v=4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2315191e'/%3E%3Cpath d='M12 38l6-13h28l6 13v9h-6v-4H18v4h-6z' fill='%23f0a23b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single narrow column read like an instrument cluster: a live
+   diagnostic line up top, the link hub as the main control, then short panels. */
+:root {
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --ink: #161a20;
+  --muted: #5c6470;
+  --line: #dde1e6;
+  --lamp: #b5650b;           /* warning-lamp amber */
+  --lamp-soft: #fbefe1;
+  --font-display: "Saira Semi Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #14181d; --panel: #1b2027; --ink: #e8ebef; --muted: #98a1ad; --line: #2a313b; --lamp: #f0a23b; --lamp-soft: #2c2215; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--font-body); }
+a { color: inherit; }
+a:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; border-radius: 6px; }
+.page { max-width: 680px; margin: 0 auto; padding-inline: 20px; padding-block: calc(40px + env(safe-area-inset-top, 0px)) calc(56px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 44px; }
+
+/* Diagnostic line */
+.trace { font: 12px/1.5 var(--font-mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px dashed var(--line); padding-bottom: 10px; }
+.trace b { color: var(--lamp); font-weight: 500; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: center; }
+.hero img { width: 88px; height: 88px; border-radius: 50%; border: 2px solid var(--line); object-fit: cover; }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 7vw, 48px); line-height: 1; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+.tagline { margin: 8px 0 0; font-size: 18px; text-wrap: balance; }
+.meta { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+.status { display: inline-flex; align-items: center; gap: 8px; font: 500 12px var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--lamp); background: var(--lamp-soft); border-radius: 999px; padding: 3px 10px; margin-top: 10px; }
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lamp); }
+@media (max-width: 460px) { .hero { grid-template-columns: 1fr; } .hero img { width: 72px; height: 72px; } }
+
+/* Link hub */
+.links { display: grid; gap: 10px; }
+.link { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: center; gap: 14px; text-decoration: none; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; transition: border-color .15s, transform .15s; }
+.link:hover { border-color: var(--lamp); transform: translateY(-1px); }
+.link .id { font: 500 12px var(--font-mono); color: var(--muted); }
+.link b { font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.1; display: block; }
+.link span.d { color: var(--muted); font-size: 14px; }
+.link .go { font-family: var(--font-mono); color: var(--lamp); }
+.link.primary { border-color: var(--lamp); }
+@media (prefers-reduced-motion: reduce) { .link { transition: none; } .link:hover { transform: none; } }
+
+/* Panels */
+h2 { font: 500 12px var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+.now { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.now li { display: grid; grid-template-columns: 20px minmax(0, 1fr); }
+.now li::before { content: "›"; color: var(--lamp); font-family: var(--font-mono); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0; text-decoration: none; }
+a.card:hover { border-color: var(--lamp); }
+.card b { font-family: var(--font-display); font-weight: 700; font-size: 19px; }
+.card p { margin: 0; color: var(--muted); font-size: 14px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tags span { font: 12px var(--font-mono); color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; }
+.creds { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.creds div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.creds span { color: var(--muted); font-size: 14px; font-family: var(--font-mono); }
+footer { color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="trace" aria-hidden="true">can0&nbsp; 7DF&nbsp; [8]&nbsp; 02 10 03 00 00 00 00 00 &nbsp;<b>›</b> 7E8&nbsp; [8]&nbsp; 06 50 03 00 32 01 F4 00 &nbsp;<b>extended diagnostic session: open</b></div>
+
+  <header class="hero">
+    <img src="https://avatars.githubusercontent.com/u/36342788?v=4" alt="William Benett" width="88" height="88">
+    <div>
+      <h1>William Benett</h1>
+      <p class="tagline">Software engineer moving into automotive cybersecurity.</p>
+      <p class="meta">CAN bus and ECU reverse engineering on a home bench · application security · eJPT</p>
+      <span class="status">Boston, MA · open to relocation</span>
+    </div>
+  </header>
+
+  <nav class="links" aria-label="Links">
+    <a class="link primary" href="https://manaburnout.tech" rel="noopener"><span class="id">0x01</span><span><b>Blog</b><span class="d">Mana Burnout: lab notes, pentesting, networks</span></span><span class="go">→</span></a>
+    <a class="link" href="https://github.com/talls2" rel="noopener"><span class="id">0x02</span><span><b>GitHub</b><span class="d">Code: Rust, C, Python, Java</span></span><span class="go">→</span></a>
+    <a class="link" href="https://www.linkedin.com/in/william-benett/" rel="noopener"><span class="id">0x03</span><span><b>LinkedIn</b><span class="d">Experience and contact</span></span><span class="go">→</span></a>
+    <a class="link" id="htb" href="https://profile.hackthebox.com/profile/01a14d34-7a53-72b5-b46c-f780d67b56a5" rel="noopener"><span class="id">0x04</span><span><b>Hack The Box</b><span class="d">Labs and rank</span></span><span class="go">→</span></a>
+    <a class="link" id="thm" href="https://tryhackme.com/p/WilliamBenett" rel="noopener"><span class="id">0x05</span><span><b>TryHackMe</b><span class="d">Jr Penetration Tester, Web Fundamentals</span></span><span class="go">→</span></a>
+  </nav>
+
+  <section>
+    <h2>Now</h2>
+    <ul class="now">
+      <li>Building an open-source CAN/UDS toolkit that runs on a virtual CAN bus</li>
+      <li>Working through PortSwigger's Web Security Academy, then PNPT</li>
+      <li>Writing up my lab and pentest notes on the blog</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+    <div class="cards">
+      <a class="card" href="https://github.com/talls2/volley" rel="noopener"><b>volley</b><p>3v3 online beach volleyball in Rust and Bevy, with a unit-tested simulation crate and a headless server.</p><div class="tags"><span>Rust</span><span>Bevy</span><span>networking</span></div></a>
+      <a class="card" href="https://github.com/talls2/CScan" rel="noopener"><b>CScan</b><p>Multithreaded TCP/UDP port scanner in C with POSIX sockets and pthreads.</p><div class="tags"><span>C</span><span>security</span></div></a>
+      <div class="card"><b>Collision Shop Manager</b><p>Shop-management system for collision and heavy-truck repair, with an importer for Mitchell estimating exports.</p><div class="tags"><span>Python</span><span>automotive</span><span>repo soon</span></div></div>
+      <div class="card"><b>VIN Scanner Tracker</b><p>Mobile app that logs vehicles by scanning VINs from barcodes, QR codes or OCR, with a realtime manager view.</p><div class="tags"><span>React</span><span>Supabase</span><span>repo soon</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Writing</h2>
+    <div class="cards">
+      <a class="card" href="https://manaburnout.tech/if-i-had-8-hours" rel="noopener"><b>If I Had 8 Hours</b><p>How I plan a penetration test: recon first, then reporting.</p></a>
+      <a class="card" href="https://manaburnout.tech/poor-dumb-networkers-teach-smart-programmers-awareness" rel="noopener"><b>Poor Dumb Networkers Teach Smart Programmers Awareness</b><p>The OSI model, taken apart in Wireshark.</p></a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Credentials</h2>
+    <div class="creds">
+      <div>eJPT, eLearnSecurity Junior Penetration Tester<span>INE · 2026</span></div>
+      <div>Jr Penetration Tester<span>TryHackMe · 2025</span></div>
+      <div>CS50's Introduction to Cybersecurity<span>Harvard · 2025</span></div>
+      <div>B.Sc. Computer Software Engineering<span>UniEVANGÉLICA · 2024</span></div>
+    </div>
+  </section>
+
+  <footer><span>© 2026 William Benett</span><span>Contact me on <a href="https://www.linkedin.com/in/william-benett/" rel="noopener">LinkedIn</a></span></footer>
+</main>
+</body>
+</html>
